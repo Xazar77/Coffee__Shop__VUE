@@ -1,33 +1,45 @@
 <template>
     <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3">
-                        <ul class="footer d-flex flex-wrap">
-                            <li class=" footer__item">
-                                <a href="./index.html">
-                                    <router-link to="/">
-                                        <img src="@/assets/logo/Logo_black.svg" alt="logo"/>
-                                    </router-link>
-                                    
-                                </a>
-                            </li>
-                            <li class="footer__item">
-                                <router-link to="/our-coffee">Our coffee</router-link>
-                                <!-- <a href="./coffeepage.html">Our coffee</a> -->
-                            </li>
-                            <li class="footer__item">
-                                <router-link to="/goods-page">For your pleasure</router-link>
-                                <!-- <a href="./goodspage.html">For your pleasure</a> -->
-                            </li>
-                            <li class="footer__item">
-                                <router-link to="/contact-us">Contact us</router-link>
-                                <!-- <a href="./contacts.html">Contact us</a> -->
-                            </li>
-                        </ul>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <ul class="footer d-flex flex-wrap">
+                        
+                        <link-item-component
+                            :link="links.footer.link"
+                            classLink="footer__item"
+                        >     
+                            <img 
+                                :src="require(`@/assets/logo/${links.footer.icon}`)" 
+                                :alt="links.footer.icon"
+                            />
+                        </link-item-component>
+
+                        <link-item-component 
+                        v-for="link in links.other" 
+                        :key="link.id" 
+                        classLink="footer__item"
+                        :link="link.link" 
+                        :text="link.text" 
+                        />
+                        
+                    </ul>
                 </div>
-                <img class="beanslogo" src="@/assets/logo/Beans_logo_dark.svg" alt="Beans logo">
             </div>
-        </footer>
+            <img class="beanslogo" src="@/assets/logo/Beans_logo_dark.svg" alt="Beans logo">
+        </div>
+    </footer>
 </template>
+
+<script>
+import LinkItemComponent from './LinkItemComponent.vue';
+export default {
+    components: { LinkItemComponent },
+    computed:{
+        links() {
+            return this.$store.getters["getFooterLinks"]
+        }
+    }
+}
+
+</script>
