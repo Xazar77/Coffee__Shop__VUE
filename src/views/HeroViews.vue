@@ -85,7 +85,13 @@ export default {
             return this.$store.getters["getBestsellersCard"]
         }
     },
-    
+    mounted() {
+        fetch('http://localhost:3000/bestsellers')
+            .then(res => res.json())
+            .then(data => {
+                this.$store.dispatch("setBestsellersData", data)
+            })
+    },
     methods: {
         smoothScroll() {
             // this.$refs.ourBest.scrollIntoView({
