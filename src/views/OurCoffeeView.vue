@@ -35,8 +35,14 @@
                     <div class="col-lg-4 offset-2">
                         <form action="#" class="shop__search">
                             <label class="shop__search-label" for="filter">Looking for</label>
-                            <input id="filter" type="text" placeholder="start typing here..."
-                                class="shop__search-input">
+                            <input 
+                            id="filter" 
+                            type="text"
+                            placeholder="start typing here..."
+                            class="shop__search-input"
+                            @input="onSearch($event)"
+                            />
+                            <!-- v-model="searchValue" -->
                         </form>
                     </div>
                     <div class="col-lg-4">
@@ -45,9 +51,9 @@
                                 Or filter
                             </div>
                             <div class="shop__filter-group">
-                                <button class="shop__filter-btn">Brazil</button>
-                                <button class="shop__filter-btn">Kenya</button>
-                                <button class="shop__filter-btn">Columbia</button>
+                                <button class="shop__filter-btn" @click="onSort('Brazil')">Brazil</button>
+                                <button class="shop__filter-btn" @click="onSort('Kenya')">Kenya</button>
+                                <button class="shop__filter-btn" @click="onSort('Columbia')">Columbia</button>
                             </div>
                         </div>
                     </div>
@@ -65,7 +71,6 @@
                             />
                            
                         </div>
-                        <!-- /our-coffee/item -->
                     </div>
                 </div>
             </div>
@@ -90,6 +95,14 @@ export default {
     computed: {
         coffee() {
             return this.$store.getters["getCoffeeCard"]
+        },
+        searchValue: {
+            set(value) {
+                this.$store.dispatch("setSearchValue", value)
+            },
+            get() {
+                return this.$store.getters["getSearchValue"]
+            }
         }
     },
     data() {
@@ -104,6 +117,18 @@ export default {
             .then(data => {
                 this.$store.dispatch("setCoffeeData", data)
             })
+    }, methods: {
+        onSearch(event) {
+            this.onSort(event.target.value)
+        },
+        onSort(value) {
+            // this.$store.dispatch("setSortValue", value)
+            fetch(`http://localhost:3000/coffee?q=${value}`)
+            .then(res => res.json())
+            .then(data => {
+                this.$store.dispatch("setCoffeeData", data)
+            })
+        }
     }
     
 }
